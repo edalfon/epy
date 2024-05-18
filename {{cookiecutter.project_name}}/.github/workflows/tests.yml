@@ -40,10 +40,9 @@ jobs:
         uses: actions/setup-python@v4.6.1
         with:
           python-version: ${{"{{"}} matrix.python {{"}}"}}
-      {% raw %}
       - name: Upgrade pip
         run: |
-          pip install --constraint=${{ github.workspace }}/.github/workflows/constraints.txt pip
+          pip install --constraint={% raw %}${{ github.workspace }}/.github/workflows/constraints.txt pip
           pip --version
 
       - name: Upgrade pip in virtual environments
@@ -64,8 +63,8 @@ jobs:
         run: |
           pipx install --pip-args=--constraint=${{ github.workspace }}/.github/workflows/constraints.txt nox
           pipx inject --pip-args=--constraint=${{ github.workspace }}/.github/workflows/constraints.txt nox nox-poetry
-          nox --version
-      {% endraw %}
+          nox --version {% endraw %}
+      
       - name: Compute pre-commit cache key
         if: matrix.session == 'pre-commit'
         id: pre-commit-cache
@@ -109,9 +108,9 @@ jobs:
           name: docs
           path: docs/_build
           overwrite: true
-{% raw %}
+
   coverage:
-    runs-on: ubuntu-latest
+    {% raw %}runs-on: ubuntu-latest
     needs: tests
     steps:
       - name: Check out the repository
@@ -152,5 +151,4 @@ jobs:
           nox --session=coverage -- xml
 
       - name: Upload coverage report
-        uses: codecov/codecov-action@v4.3.1
-{% endraw %}
+        uses: codecov/codecov-action@v4.3.1 {% endraw %}
