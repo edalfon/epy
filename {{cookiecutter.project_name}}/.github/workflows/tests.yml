@@ -98,7 +98,7 @@ jobs:
         if: always() && matrix.session == 'tests'
         uses: "actions/upload-artifact@v4"
         with:
-          name: coverage-data
+          name: coverage-data-${{"{{"}} matrix.python {{"}}"}}-${{"{{"}} matrix.os {{"}}"}}-${{"{{"}} matrix.session {{"}}"}}
           path: ".coverage.*"
           overwrite: true
 
@@ -141,7 +141,7 @@ jobs:
       - name: Download coverage data
         uses: actions/download-artifact@v4
         with:
-          name: coverage-data
+          name: coverage-data-3.10-ubuntu-latest-tests
 
       - name: Combine coverage data and display human readable report
         run: |
