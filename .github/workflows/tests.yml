@@ -15,22 +15,21 @@ jobs:
     name: Python ${{ matrix.python-version }} (${{ matrix.os }})
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         with:
-          path: cookiecutter-hypermodern-python
-      - uses: actions/setup-python@v4.5.0
+          path: epy
+      - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
       - name: Install tools using pip
-        working-directory: cookiecutter-hypermodern-python
         run: |
-          pip install --constraint=.github/workflows/constraints.txt pip
-          pipx install --pip-args=--constraint=.github/workflows/constraints.txt cookiecutter
-          pipx install --pip-args=--constraint=.github/workflows/constraints.txt nox
-          pipx inject --pip-args=--constraint=.github/workflows/constraints.txt nox nox-poetry
-          pipx install --pip-args=--constraint=.github/workflows/constraints.txt poetry
+          pip install --constraint=${{ github.workspace }}/epy/.github/workflows/constraints.txt pip
+          pipx install --pip-args=--constraint=${{ github.workspace }}/epy/.github/workflows/constraints.txt cookiecutter
+          pipx install --pip-args=--constraint=${{ github.workspace }}/epy/.github/workflows/constraints.txt nox
+          pipx inject --pip-args=--constraint=${{ github.workspace }}/epy/.github/workflows/constraints.txt nox nox-poetry
+          pipx install --pip-args=--constraint=${{ github.workspace }}/epy/.github/workflows/constraints.txt poetry
       - name: Generate project using Cookiecutter
-        run: cookiecutter --no-input cookiecutter-hypermodern-python
+        run: cookiecutter --no-input epy
       - name: Create git repository
         if: matrix.os != 'windows-latest'
         run: |
@@ -67,7 +66,7 @@ jobs:
           result = "${{ runner.os }}-{}-{}-pre-commit".format(python, digest)
 
           print("::set-output name=result::{}".format(result))
-      - uses: actions/cache@v3
+      - uses: actions/cache@v4
         if: matrix.os != 'windows-latest'
         with:
           path: ~/.cache/pre-commit
