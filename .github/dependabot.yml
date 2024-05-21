@@ -33,3 +33,25 @@ updates:
       - "dependencies"
       - "github_actions"
     open-pull-requests-limit: 99
+  - package-ecosystem: github-actions
+    directory: "/{{cookiecutter.project_name}}"
+    schedule:
+      interval: daily
+      time: "04:00"
+      timezone: "Europe/Berlin"
+    labels:
+      - "cookiecutter"
+      - "dependencies"
+      - "github_actions"
+    open-pull-requests-limit: 99
+  - package-ecosystem: github-actions
+    directory: "/{{cookiecutter.project_name}}/.github/workflows"
+    schedule:
+      interval: daily
+      time: "04:00"
+      timezone: "Europe/Berlin"
+    labels:
+      - "cookiecutter"
+      - "dependencies"
+      - "github_actions"
+    open-pull-requests-limit: 99
